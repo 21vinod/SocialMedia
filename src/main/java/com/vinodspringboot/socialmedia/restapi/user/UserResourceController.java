@@ -1,6 +1,6 @@
 package com.vinodspringboot.socialmedia.restapi.user;
 
-import com.vinodspringboot.socialmedia.restapi.exceptionhandling.ResourceNotFoundException;
+import com.vinodspringboot.socialmedia.restapi.exceptionhandling.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,7 +26,7 @@ public class UserResourceController {
     public User getUsers(@PathVariable int id) {
         User user = userDaoService.getUserById(id);
         if (user == null) {
-            throw new ResourceNotFoundException("id:" + id);
+            throw new UserNotFoundException("id:" + id);
         }
         return user;
     }
@@ -40,6 +40,11 @@ public class UserResourceController {
                 .buildAndExpand(newUser.getId())
                 .toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @DeleteMapping(path = "/users/{id}")
+    public void deleteUsers(@PathVariable int id) {
+        userDaoService.deleteUserById(id);
     }
 
 }
